@@ -100,6 +100,15 @@ public class Map : MonoBehaviour {
         W[row, column] = _hashedFloorIndex[hash];
     }
 
+    public void Repaint (int row, int column) {
+        if (W[row, column] == 0) {
+            Destroy(tiles[row, column]);
+            Debug.Log("Destroying! " + row + ", " + column);
+        } else {
+            tiles[row, column].GetComponent<SpriteRenderer>().sprite = floorSprites[W[row, column]];
+        }
+    }
+
     public void PaintMap () {
         ClearTileMap();
 
@@ -153,14 +162,21 @@ public class Map : MonoBehaviour {
     }
 
     public void Destroy (int row, int col) {
+        Debug.Log("destroying " + row + ", " + col);
         W[row,col] = 0;
+        // Repaint(row, col);
 
         for (int i=-1; i<2; i++) {
             for (int j=-1; j<2; j++) {
-                try { MakeCoherent(row + i, col + j); } catch {};
+                try {
+                    MakeCoherent(row + i, col + j);
+                    // Repaint(row+i, col+j);
+                } catch {};
             }
         }
-        
+
+        PaintMap();
+
     }
 
     public void Destroy (Tile tile) {

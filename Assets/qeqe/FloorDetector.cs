@@ -1,16 +1,24 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Qeqe {
     public class FloorDetector : MonoBehaviour {
-        public bool isInFloor = false;
+        public List<Raycaster> raycasters;
+        public Raycaster dig;
 
-        void OnCollisionStay2D (Collision2D c) {
-            isInFloor = true;
+        public bool IsInFloor () {
+            for (int i=0; i<raycasters.Count; i++) {
+                if (raycasters[i].GetImpacted() != null) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
-        void OnCollisionExit2D (Collision2D c) {
-            isInFloor = false;
+        public GameObject GetDiggedFloor () {
+            return dig.GetImpacted();
         }
     }
 }
