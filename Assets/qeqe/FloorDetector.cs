@@ -5,8 +5,6 @@ using System.Collections.Generic;
 namespace Qeqe {
     public class FloorDetector : MonoBehaviour {
         public List<Raycaster> raycasters;
-        public Raycaster dig;
-        public Raycaster frontalDig;
 
         public bool IsInFloor () {
             for (int i=0; i<raycasters.Count; i++) {
@@ -17,10 +15,5 @@ namespace Qeqe {
 
             return false;
         }
-
-        public GameObject GetDiggedFloor () {
-            return dig.GetImpacted();
-        }
-
     }
 }

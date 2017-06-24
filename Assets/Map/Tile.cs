@@ -6,7 +6,9 @@ using Qeqe;
 public class Tile : MonoBehaviour {
     public int row;
     public int column;
-    public int hp = 1;
+    public float hp = 1;
+
+    public GameObject indestructibleIndicator;
 
     public void SetIndexes (int row, int column) {
         this.row = row;
@@ -30,5 +32,10 @@ public class Tile : MonoBehaviour {
 
     public void StopGettingDigged () {
         StopAllCoroutines();
+    }
+
+    public void SetIndestructible () {
+        hp = Mathf.Infinity;
+        indestructibleIndicator.SetActive(true);
     }
 }

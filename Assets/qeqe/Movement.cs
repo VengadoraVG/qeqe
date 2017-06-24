@@ -11,7 +11,7 @@ namespace Qeqe {
         public SpriteRenderer tileSample;
         public Rigidbody2D body;
         public FloorDetector floorDetector;
-        
+
         public float maxSpeed = 2;
         public float jumpVelocity = 10;
         public float maxYVelocity = 10;
@@ -25,7 +25,7 @@ namespace Qeqe {
             body = GetComponent<Rigidbody2D>();
             CalculateVelocities();
         }
-    
+
         void FixedUpdate () {
             if (!_isBlocked) {
                 XAxisMovementUpdate();
@@ -39,6 +39,8 @@ namespace Qeqe {
                 _MecanimUpdate();
                 JumpUpdate();
             }
+
+            ViewOrientationUpdate();
         }
 
         private IEnumerator _HigherJumpVerifier () {
@@ -72,11 +74,18 @@ namespace Qeqe {
         public void XAxisMovementUpdate () {
             float x = Input.GetAxis("Horizontal") * maxSpeed;
             body.velocity = new Vector2(x, body.velocity.y);
-            if (body.velocity.x != 0) {
-                transform.localScale =
-                    new Vector2(Mathf.Abs(transform.localScale.x) * Mathf.Sign(body.velocity.x),
-                                transform.localScale.y);
+        }
+
+        public void ViewOrientationUpdate () {
+            if (Input.GetAxis("Horizontal") == 0)
+                return;
+
+            float y = 0;
+            if (Input.GetAxis("Horizontal") < 0) {
+                y = 180;
             }
+
+            transform.rotation = Quaternion.Euler(0, y, 0);
         }
 
         public void CalculateVelocities () {
@@ -99,8 +108,7 @@ namespace Qeqe {
 
         public bool IsStandingStill () {
             return floorDetector.IsInFloor() &&
-                Mathf.Abs(body.velocity.x) < 0.1f &&
-                Mathf.Abs(body.velocity.y) < 0.1f;
+                Mathf.Abs(body.velocity.x) < 0.5f;
         }
     }
 }

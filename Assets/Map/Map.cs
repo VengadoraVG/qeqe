@@ -14,6 +14,7 @@ public class Map : MonoBehaviour {
     public GameObject[,] tiles;
     public TextAsset floorInfo;
 
+    public char indestructibleChar = 'x';
     public char floorChar = '1';
     public char voidChar = '0';
 
@@ -21,6 +22,8 @@ public class Map : MonoBehaviour {
 
     [HideInInspector]
     public int[,] W;
+    [HideInInspector]
+    public int[,] I; // mask of indestructible tiles
     [HideInInspector]
     public Vector2 tileSize;
 
@@ -67,7 +70,7 @@ public class Map : MonoBehaviour {
 
 
     public void Initialize () {
-        _mapChar = "" + floorChar + voidChar;
+        _mapChar = "" + floorChar + voidChar + indestructibleChar;
         tileSize = tilePrototype.GetComponent<SpriteRenderer>().bounds.size;
         _hashedFloorIndex = new Dictionary<int, int>();
 
@@ -120,6 +123,10 @@ public class Map : MonoBehaviour {
                     tiles[i,j].transform.localPosition = new Vector3(j*tileSize.x, (height-1-i)*tileSize.y);
                     tiles[i,j].GetComponent<SpriteRenderer>().sprite = floorSprites[W[i,j]];
                     tiles[i,j].GetComponent<Tile>().SetIndexes(i,j);
+
+                    if (I[i,j] == 1) {
+                        tiles[i,j].GetComponent<Tile>().SetIndestructible();
+                    }
                 }
             }
         }
@@ -140,17 +147,24 @@ public class Map : MonoBehaviour {
     public void DigestFloorInfo () {
         string raw = floorInfo.text;
 
-        width = raw.IndexOf('\n') - 1; // o__O ¡¿-1?! FUCKING TEXTASSET!!! replaces \n with two chars >__>
+        width = raw.IndexOf('\n') - 1; // new line at end of file
         height = raw.Length/(width + 1);
 
         W = new int[height, width];
-        raw = _GetSanitizedRaw();
+        I = new int[height, width];
+        raw = _GetSanitizedRaw(); // FUCKING TEXTASSET!!! replaces \n with two chars >__>
 
         for (int i=0; i<height; i++) {
             for (int j=0; j<width; j++) {
-                W[i,j] = raw[i*width + j] == voidChar? 0 : 1; // this should be a switch case o.O 
+                char symbol = raw[i*width + j];
+                W[i,j] = IsVoid(symbol)? 0 : 1;
+                I[i,j] = symbol == indestructibleChar? 1 : 0;
             }
         }
+    }
+
+    public bool IsVoid (char symbol) {
+        return symbol == voidChar;
     }
 
     public void MakeEverythingCoherent () {
@@ -162,20 +176,19 @@ public class Map : MonoBehaviour {
     }
 
     public void Destroy (int row, int col) {
-        Debug.Log("destroying " + row + ", " + col);
         W[row,col] = 0;
-        // Repaint(row, col);
+        Repaint(row, col);
 
         for (int i=-1; i<2; i++) {
             for (int j=-1; j<2; j++) {
                 try {
                     MakeCoherent(row + i, col + j);
-                    // Repaint(row+i, col+j);
+                    Repaint(row+i, col+j);
                 } catch {};
             }
         }
 
-        PaintMap();
+        // PaintMap();
 
     }
 

@@ -9,8 +9,7 @@ namespace Qeqe {
         public Raycaster frontalDigger;
         public bool isDigging = false;
 
-        public ParticleSystem leftDust;
-        public ParticleSystem rightDust;
+        public ParticleSystem dust;
 
         public Movement movement;
 
@@ -32,6 +31,7 @@ namespace Qeqe {
                     if (newDiggedTile != null) {
                         isDigging = true;
                         newDiggedTile.StartGettingDigged();
+                        dust.Play();
                     }
                     digged = newDiggedTile;
                 }
@@ -53,6 +53,9 @@ namespace Qeqe {
             }
 
             movement.animator.SetBool("IsDigging", isDigging);
+            if (!isDigging) {
+                dust.Stop();
+            }
         }
 
         public Tile GetDiggedTile () {
