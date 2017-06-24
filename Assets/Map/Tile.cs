@@ -13,18 +13,22 @@ public class Tile : MonoBehaviour {
         this.column = column;
     }
 
-    public IEnumerator GetDigged (GameObject digger) {
+    public void StartGettingDigged () {
+        StartCoroutine(_GetDigged());
+    }
+
+    private IEnumerator _GetDigged () {
         float elapsedTime = 0;
 
         do {
             yield return null;
             elapsedTime += Time.deltaTime;
-        } while (elapsedTime < hp && Input.GetKey(Verbs.Dig));
+        } while (elapsedTime < hp);
 
-        digger.GetComponent<Movement>().StopDigging();
+        Map.instance.Destroy(this);
+    }
 
-        if (Input.GetKey(Verbs.Dig)) {
-            Map.instance.Destroy(this);
-        }
+    public void StopGettingDigged () {
+        StopAllCoroutines();
     }
 }

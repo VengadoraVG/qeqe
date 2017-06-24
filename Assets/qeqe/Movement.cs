@@ -16,12 +16,10 @@ namespace Qeqe {
         public float jumpVelocity = 10;
         public float maxYVelocity = 10;
 
-        public bool isDigging = false;
-        public ParticleSystem leftDust;
-        public ParticleSystem rightDust;
-
         public Animator animator;
+
         private float _higherJumpTimeVerification;
+        private bool _isBlocked;
 
         void Start () {
             body = GetComponent<Rigidbody2D>();
@@ -29,35 +27,28 @@ namespace Qeqe {
         }
     
         void FixedUpdate () {
-            XAxisMovementUpdate();
+            if (!_isBlocked) {
+                XAxisMovementUpdate();
+            }
+            // trim y axis velocity
             body.velocity = new Vector3(body.velocity.x, Mathf.Max(-maxYVelocity, body.velocity.y));
         }
 
         void Update () {
-            JumpUpdate();
-            _MecanimUpdate();
-            _DigUpdate();
+            if (!_isBlocked) {
+                _MecanimUpdate();
+                JumpUpdate();
+            }
         }
 
         private IEnumerator _HigherJumpVerifier () {
             yield return new WaitForSeconds(_higherJumpTimeVerification);
 
-            if (!Input.GetKey(Verbs.Jump)) {
+            if (!Verbs.JumpHigher) {
                 body.velocity = Vector3.Scale(body.velocity, new Vector2(1,0.5f));
             } else {
                 StartCoroutine(_HigherJumpVerifier());
             }
-        }
-
-        private void _DigUpdate () {
-            if (Input.GetKey(Verbs.Dig) && floorDetector.IsInFloor() && body.velocity.x == 0 && !isDigging) {
-                StartDigging();
-                StopAllCoroutines();
-                StartCoroutine(floorDetector.dig.GetImpacted().GetComponent<Tile>().GetDigged(this.gameObject));
-            } else if (!Input.GetKey(Verbs.Dig)) {
-                StopDigging();
-            }
-            animator.SetBool("IsDigging", isDigging);
         }
 
         private void _MecanimUpdate () {
@@ -70,7 +61,7 @@ namespace Qeqe {
         }
 
         public void JumpUpdate () {
-            if (Input.GetKeyDown(Verbs.Jump) && floorDetector.IsInFloor()) {
+            if (Verbs.Jump && floorDetector.IsInFloor()) {
                 body.velocity = new Vector2(body.velocity.x, jumpVelocity);
                 animator.SetTrigger("Jump");
                 StopAllCoroutines();
@@ -78,30 +69,13 @@ namespace Qeqe {
             }
         }
 
-        public void StartDigging () {
-            isDigging = true;
-            if (transform.localScale.x < 0) {
-                leftDust.Play();
-            } else {
-                rightDust.Play();
-            }
-        }
-
-        public void StopDigging () {
-            isDigging = false;
-            leftDust.Stop();
-            rightDust.Stop();
-        }
-
         public void XAxisMovementUpdate () {
-            if (!isDigging) {
-                float x = Input.GetAxis("Horizontal") * maxSpeed;
-                body.velocity = new Vector2(x, body.velocity.y);
-                if (body.velocity.x != 0) {
-                    transform.localScale =
-                        new Vector2(Mathf.Abs(transform.localScale.x) * Mathf.Sign(body.velocity.x),
-                                    transform.localScale.y);
-                }
+            float x = Input.GetAxis("Horizontal") * maxSpeed;
+            body.velocity = new Vector2(x, body.velocity.y);
+            if (body.velocity.x != 0) {
+                transform.localScale =
+                    new Vector2(Mathf.Abs(transform.localScale.x) * Mathf.Sign(body.velocity.x),
+                                transform.localScale.y);
             }
         }
 
@@ -113,6 +87,20 @@ namespace Qeqe {
             maxSpeed = maxTilesJumped.x * tileSize / timeOnAir;
 
             _higherJumpTimeVerification = (timeOnAir/4) * 0.5f;
+        }
+
+        public void Block () {
+            _isBlocked = true;
+        }
+
+        public void Unblock () {
+            _isBlocked = false;
+        }
+
+        public bool IsStandingStill () {
+            return floorDetector.IsInFloor() &&
+                Mathf.Abs(body.velocity.x) < 0.1f &&
+                Mathf.Abs(body.velocity.y) < 0.1f;
         }
     }
 }
