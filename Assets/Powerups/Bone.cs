@@ -8,7 +8,8 @@ namespace Powerup {
 
         public override void GetConsumed () {
             theSprite.GetComponent<Animator>().SetTrigger("GetConsumed");
-            Consumer.instance.bones++;
+            theSprite.GetComponent<SpriteRenderer>().sortingLayerName = "Indicators";
+            Consumer.instance.ConsumeBone();
             Destroy(theArrow);
         }
     }

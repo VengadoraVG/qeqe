@@ -13,6 +13,9 @@ namespace QeqeInput {
             get { return Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow); } }
         public static bool Dig {
             get { return BelowDig || FrontalDig; } }
+        public static bool Smell {
+            get { return Input.GetKey(KeyCode.S); } }
+        public static bool Reset {
+            get { return Input.GetKey(KeyCode.Escape); } }
     }
-
 }

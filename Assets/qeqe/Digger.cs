@@ -28,7 +28,7 @@ namespace Qeqe {
                         digged.StopGettingDigged();
                     }
 
-                    if (newDiggedTile != null) {
+                    if (newDiggedTile != null && Consumer.instance.CanDig()) {
                         isDigging = true;
                         newDiggedTile.StartGettingDigged();
                         dust.Play();

@@ -28,6 +28,7 @@ public class Tile : MonoBehaviour {
         } while (elapsedTime < hp);
 
         Map.instance.Destroy(this);
+        Consumer.instance.ConsumeEnergy();
     }
 
     public void StopGettingDigged () {

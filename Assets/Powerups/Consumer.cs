@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Consumer : MonoBehaviour {
     public static Consumer instance;
-    public int bones;
+    public int multiplier = 3;
+    public int energy = 0;
 
     void Start () {
         instance = this;
@@ -11,5 +12,17 @@ public class Consumer : MonoBehaviour {
     
     void Update () {
         
+    }
+
+    public void ConsumeBone () {
+        energy += multiplier;
+    }
+
+    public bool CanDig () {
+        return energy > 0;
+    }
+
+    public void ConsumeEnergy () {
+        energy--;
     }
 }
