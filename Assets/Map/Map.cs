@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Powerup;
 
 [ExecuteInEditMode]
 public class Map : MonoBehaviour {
@@ -10,13 +11,17 @@ public class Map : MonoBehaviour {
     public int height;
     public GameObject mapPosition;
     public GameObject tilePrototype;
+    public GameObject bonePrototype;
 
     public GameObject[,] tiles;
+    public GameObject[,] bones;
     public TextAsset floorInfo;
 
     public char indestructibleChar = 'x';
     public char floorChar = '1';
     public char voidChar = '0';
+    public char hiddenBoneChar = 'h';
+    public char boneChar = 'b';
 
     public static Map instance;
 
@@ -24,6 +29,8 @@ public class Map : MonoBehaviour {
     public int[,] W;
     [HideInInspector]
     public int[,] I; // mask of indestructible tiles
+    [HideInInspector]
+    public int[,] B; // mask of consumables
     [HideInInspector]
     public Vector2 tileSize;
 
@@ -70,7 +77,8 @@ public class Map : MonoBehaviour {
 
 
     public void Initialize () {
-        _mapChar = "" + floorChar + voidChar + indestructibleChar;
+        _mapChar = "" + floorChar + voidChar + indestructibleChar
+            + hiddenBoneChar + boneChar;
         tileSize = tilePrototype.GetComponent<SpriteRenderer>().bounds.size;
         _hashedFloorIndex = new Dictionary<int, int>();
 
@@ -128,6 +136,14 @@ public class Map : MonoBehaviour {
                         tiles[i,j].GetComponent<Tile>().SetIndestructible();
                     }
                 }
+
+                if (B[i,j] == 1) {
+                    bones[i,j] = Instantiate(bonePrototype);
+                    bones[i,j].transform.parent = mapPosition.transform;
+                    bones[i,j].transform.localPosition =
+                        new Vector3(j*tileSize.x, (height-1-i) * tileSize.y);
+                    bones[i,j].GetComponent<Bone>().Initialize(i,j);
+                }
             }
         }
     }
@@ -142,6 +158,7 @@ public class Map : MonoBehaviour {
         mapPosition = newMapPosition;
 
         tiles = new GameObject[height, width];
+        bones = new GameObject[height, width];
     }
 
     public void DigestFloorInfo () {
@@ -152,6 +169,7 @@ public class Map : MonoBehaviour {
 
         W = new int[height, width];
         I = new int[height, width];
+        B = new int[height, width];
         raw = _GetSanitizedRaw(); // FUCKING TEXTASSET!!! replaces \n with two chars >__>
 
         for (int i=0; i<height; i++) {
@@ -159,12 +177,13 @@ public class Map : MonoBehaviour {
                 char symbol = raw[i*width + j];
                 W[i,j] = IsVoid(symbol)? 0 : 1;
                 I[i,j] = symbol == indestructibleChar? 1 : 0;
+                B[i,j] = (symbol == hiddenBoneChar || symbol == boneChar)? 1 : 0;
             }
         }
     }
 
     public bool IsVoid (char symbol) {
-        return symbol == voidChar;
+        return symbol == voidChar || symbol == boneChar;
     }
 
     public void MakeEverythingCoherent () {
@@ -187,9 +206,6 @@ public class Map : MonoBehaviour {
                 } catch {};
             }
         }
-
-        // PaintMap();
-
     }
 
     public void Destroy (Tile tile) {
