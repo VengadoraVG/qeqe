@@ -12,6 +12,7 @@ public class Map : MonoBehaviour {
     public GameObject mapPosition;
     public GameObject tilePrototype;
     public GameObject bonePrototype;
+    public GameObject nextPrototype;
     public GameObject qeqe;
 
     public GameObject[,] tiles;
@@ -24,6 +25,7 @@ public class Map : MonoBehaviour {
     public char hiddenBoneChar = 'h';
     public char boneChar = 'b';
     public char qeqeChar = 'q';
+    public char nextChar = 'n';
 
     public static Map instance;
 
@@ -34,6 +36,8 @@ public class Map : MonoBehaviour {
     public int[,] I; // mask of indestructible tiles
     [HideInInspector]
     public int[,] B; // mask of consumables
+    [HideInInspector]
+    public int[,] N; // mask of next level portal
     [HideInInspector]
     public Vector2 tileSize;
 
@@ -79,7 +83,7 @@ public class Map : MonoBehaviour {
 
     public void Initialize () {
         _mapChar = "" + floorChar + voidChar + indestructibleChar
-            + hiddenBoneChar + boneChar + qeqeChar;
+            + hiddenBoneChar + boneChar + qeqeChar + nextChar;
         tileSize = tilePrototype.GetComponent<SpriteRenderer>().bounds.size;
         _hashedFloorIndex = new Dictionary<int, int>();
 
@@ -94,6 +98,7 @@ public class Map : MonoBehaviour {
         W = lvlStatus.W;
         I = lvlStatus.I;
         B = lvlStatus.B;
+        N = lvlStatus.N;
         width = lvlStatus.width;
         height = lvlStatus.height;
 
@@ -157,6 +162,21 @@ public class Map : MonoBehaviour {
                     bones[i,j].transform.localPosition = GetLocalPosition(i, j);
                     bones[i,j].GetComponent<Bone>().Initialize(i,j);
                 }
+
+                if (N[i,j] == 1) {
+                    GameObject portal = Instantiate(nextPrototype);
+                    portal.transform.parent = mapPosition.transform;
+                    portal.transform.localPosition = GetLocalPosition(i, j);
+                    if (j == 0) {
+                        portal.transform.Rotate(0, 180, 0);
+                    }
+
+                    if (i == height-1) {
+                        portal.transform.Rotate(0,0, -90);
+                    } else if (i == 0) {
+                        portal.transform.Rotate(0,0, 90);
+                    }
+                }
             }
         }
     }
@@ -171,7 +191,11 @@ public class Map : MonoBehaviour {
         newMapPosition.transform.localScale = mapPosition.transform.localScale;
         newMapPosition.transform.parent = mapPosition.transform.parent;
 
-        DestroyImmediate(mapPosition);
+        if (Application.isPlaying) {
+            Destroy(mapPosition);
+        } else {
+            DestroyImmediate(mapPosition);
+        }
         mapPosition = newMapPosition;
 
         tiles = new GameObject[height, width];
@@ -179,7 +203,8 @@ public class Map : MonoBehaviour {
     }
 
     public bool IsVoid (char symbol) {
-        return symbol == voidChar || symbol == boneChar || symbol == qeqeChar;
+        return symbol == voidChar || symbol == boneChar || symbol == qeqeChar ||
+            symbol == nextChar;
     }
 
     public void MakeEverythingCoherent () {

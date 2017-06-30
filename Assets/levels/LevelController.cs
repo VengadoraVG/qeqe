@@ -11,6 +11,8 @@ namespace Level {
         public int CurrentLevel = 0;
         public Map mapController;
 
+        public static LevelController instance;
+
         void Start () {
             Initialize();
         }
@@ -24,6 +26,7 @@ namespace Level {
         }
 
         public void Initialize () {
+            instance = this;
             levels = new LevelStatus[rawLevels.Length];
             mapController.Initialize();
 
@@ -43,6 +46,11 @@ namespace Level {
             levels[lvlIndex] = new LevelStatus();
             levels[lvlIndex].Digest(rawLevels[lvlIndex].text, mapController);
             Load(lvlIndex);
+        }
+
+        public void NextLevel () {
+            CurrentLevel = (CurrentLevel + 1) % levels.Length;
+            Load(CurrentLevel);
         }
     }
 }

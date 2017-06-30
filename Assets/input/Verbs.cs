@@ -16,6 +16,6 @@ namespace QeqeInput {
         public static bool Smell {
             get { return Input.GetKey(KeyCode.S); } }
         public static bool Reset {
-            get { return Input.GetKey(KeyCode.Escape); } }
+            get { return Input.GetKeyDown(KeyCode.Escape); } }
     }
 }
