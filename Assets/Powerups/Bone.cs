@@ -11,6 +11,8 @@ namespace Powerup {
             theSprite.GetComponent<SpriteRenderer>().sortingLayerName = "Indicators";
             Consumer.instance.ConsumeBone();
             Destroy(theArrow);
+            level.RemoveBone(row, column);
+            Lvl.LevelController.instance.CountBones();
         }
     }
 }
