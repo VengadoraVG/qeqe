@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using QeqeInput;
+using Map;
 
 namespace Qeqe {
     public class Digger : MonoBehaviour {

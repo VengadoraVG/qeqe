@@ -17,5 +17,7 @@ namespace QeqeInput {
             get { return Input.GetKey(KeyCode.S); } }
         public static bool Reset {
             get { return Input.GetKeyDown(KeyCode.Escape); } }
+        public static bool Undo {
+            get { return Input.GetKeyDown(KeyCode.Delete); } }
     }
 }

@@ -28,4 +28,8 @@ public class Consumer : MonoBehaviour {
     public void ConsumeEnergy () {
         energy--;
     }
+
+    public void SetEnergy (int energy) {
+        this.energy = energy;
+    }
 }
