@@ -17,7 +17,7 @@ namespace Lvl {
 
         public TextAsset raw;
 
-        public Vector2 position;
+        public Vector2 position; // qeqe spawning point
         public int lvlIndex;
 
         private string _mapChar = "x10hbqn";

@@ -8,6 +8,8 @@ using Lvl;
 namespace Map {
     [ExecuteInEditMode]
     public class MapRenderer : MonoBehaviour {
+        public bool isPreview;
+
         public Sprite[] floorSprites;
         public int width;
         public int height;
@@ -23,8 +25,6 @@ namespace Map {
         public GameObject[,] bones;
         public ExternalController external;
 
-        public static MapRenderer instance;
-
         public Level lvl;
 
         void Start () {
@@ -38,18 +38,14 @@ namespace Map {
             }
         }
 
-        void OnDestroy () {
-            if (instance == this) {
-                instance = null;
-            }
-        }
-
         public void Initialize () {
-            instance = this;
             tileSize = tilePrototype.GetComponent<SpriteRenderer>().bounds.size;
         }
 
         public void SetLvlStatus (Level lvl) {
+            Vector3 scale = transform.localScale;
+            transform.localScale = new Vector3(1, 1, 1);;
+
             this.lvl = lvl;
 
             if (external != null) {
@@ -59,11 +55,14 @@ namespace Map {
             width = lvl.width;
             height = lvl.height;
 
-            qeqe.transform.position =
-                GetLocalPosition((int) lvl.position.y, (int) lvl.position.x)
-                + mapPosition.transform.position;
+            if (!isPreview) {
+                qeqe.transform.position =
+                    GetLocalPosition((int) lvl.position.y, (int) lvl.position.x)
+                    + mapPosition.transform.position;
+            }
 
             PaintMap();
+            transform.localScale = scale;
         }
 
         public void Repaint (int row, int column) {
@@ -91,7 +90,7 @@ namespace Map {
         }
 
         public void PortalRender (int row, int col) {
-            if (lvl.N[row, col] == 1) {
+            if (lvl.N[row, col] == 1 && !isPreview) {
                 RenderAt(row, col, nextPrototype).GetComponent<NextLevelPortal>().Initialize(row, col, width, height);
             }
         }
@@ -99,7 +98,9 @@ namespace Map {
         public void BoneRender (int row, int col) {
             if (lvl.B[row, col] == 1) {
                 bones[row, col] = RenderAt(row, col, bonePrototype);
-                bones[row, col].GetComponent<Bone>().Initialize(row, col, this.lvl);
+                if (!isPreview) {
+                    bones[row, col].GetComponent<Bone>().Initialize(row, col, this.lvl);
+                }
             }
         }
 
@@ -107,9 +108,13 @@ namespace Map {
             if (lvl.W[row,col] != 0) {
                 tiles[row,col] = RenderAt(row, col, tilePrototype);
                 tiles[row,col].GetComponent<SpriteRenderer>().sprite = floorSprites[lvl.W[row,col]];
-                tiles[row,col].GetComponent<Tile>().SetIndexes(row,col);
-                if (lvl.I[row, col] == 1) {
-                    tiles[row, col].GetComponent<Tile>().SetIndestructible();
+                if (!isPreview) {
+                    Tile tile = tiles[row,col].GetComponent<Tile>();
+                    tile.SetIndexes(row,col);
+                    if (lvl.I[row, col] == 1) {
+                        tile.SetIndestructible();
+                    }
+                    tile.mapRenderer = this;
                 }
             }
         }

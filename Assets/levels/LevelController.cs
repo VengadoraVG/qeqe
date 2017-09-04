@@ -13,6 +13,8 @@ namespace Lvl {
         public ChainOfLevels chain;
         public int boneCount;
 
+        public Map.Previewer ppreviewer;
+
         public static LevelController instance;
 
         void Start () {
@@ -78,6 +80,7 @@ namespace Lvl {
         }
 
         public void NextLevel () {
+            ppreviewer.SetPreviewSource(levels[currentLevel]);
             currentLevel = (currentLevel + 1) % levels.Length;
             Load(currentLevel);
             EnterLevel(currentLevel);

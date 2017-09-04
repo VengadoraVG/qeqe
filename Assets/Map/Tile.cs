@@ -5,6 +5,7 @@ using Qeqe;
 
 namespace Map {
     public class Tile : MonoBehaviour {
+        public MapRenderer mapRenderer;
         public int row;
         public int column;
         public float hp = 1;
@@ -28,7 +29,7 @@ namespace Map {
                 elapsedTime += Time.deltaTime;
             } while (elapsedTime < hp);
 
-            MapRenderer.instance.Destroy(this);
+            mapRenderer.Destroy(this);
             Consumer.instance.ConsumeEnergy();
         }
 

@@ -8,10 +8,15 @@ namespace Powerup {
         public int column;
         public Level level;
 
+        private float consumedTime = -1;
+
         void OnTriggerEnter2D (Collider2D c) {
-            GetComponent<Animator>().SetTrigger("Explode");
-            GetComponent<Collider2D>().enabled = false;
-            GetConsumed();
+            if (consumedTime != Time.time) {
+                GetComponent<Animator>().SetTrigger("Explode");
+                GetComponent<Collider2D>().enabled = false;
+                GetConsumed();
+                consumedTime = Time.time;
+            }
         }
 
         public void Initialize (int row, int column, Level level) {
