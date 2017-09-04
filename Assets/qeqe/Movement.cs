@@ -55,7 +55,7 @@ namespace Qeqe {
 
         private void _MecanimUpdate () {
             animator.SetFloat("SpeedX", Mathf.Abs(body.velocity.x));
-            animator.SetFloat("VelocityY", body.velocity.y);
+            animator.SetFloat("VelocityY", !floorDetector.IsInFloor()? body.velocity.y: 0);
         }
 
         public float CalculateJumpVelocity (float tiles) {
@@ -108,7 +108,7 @@ namespace Qeqe {
 
         public bool IsStandingStill () {
             return floorDetector.IsInFloor() &&
-                Mathf.Abs(body.velocity.x) < 0.5f;
+                Mathf.Abs(body.velocity.x) < 0.3f;
         }
     }
 }

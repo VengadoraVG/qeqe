@@ -2,8 +2,16 @@ using UnityEngine;
 using System.Collections;
 
 public class NextLevelPortal : MonoBehaviour {
+    public float timeLastUse = 0;
+
     void OnTriggerEnter2D (Collider2D c) {
-        Lvl.LevelController.instance.NextLevel();
+        /* qeqe has multiple colliders.
+           the condition assures that portal get used only
+           once in a frame */
+        if (timeLastUse != Time.time) { 
+            Lvl.LevelController.instance.NextLevel();
+            timeLastUse = Time.time;
+        }
     }
 
     public void Initialize (int row, int column, int width, int height) {

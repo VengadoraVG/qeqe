@@ -52,6 +52,10 @@ namespace Lvl {
             Load(currentLevel);
         }
 
+        public void Initialize (int lvlIndex) {
+            levels[lvlIndex] = new Level(rawLevels[lvlIndex], lvlIndex);
+        }
+
         public void Load (int lvlIndex) {
             mapRenderer.SetLvlStatus(levels[lvlIndex]);
             mapRenderer.Initialize();
@@ -71,10 +75,6 @@ namespace Lvl {
 
         public void EnterLevel (int lvlIndex) {
             chain.AddBeginning();
-        }
-
-        public void Initialize (int lvlIndex) {
-            levels[lvlIndex] = new Level(rawLevels[lvlIndex], lvlIndex);
         }
 
         public void NextLevel () {
