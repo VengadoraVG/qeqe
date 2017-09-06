@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Lvl {
     public class ChainOfLevels {
-        public Stack<LevelLink> chain = new Stack<LevelLink>();
+        public Stack<LevelStatus> chain = new Stack<LevelStatus>();
 
         public void AddBeginning () {
             chain.Push(new LevelLink());

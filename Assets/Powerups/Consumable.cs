@@ -16,6 +16,9 @@ namespace Powerup {
                 GetComponent<Collider2D>().enabled = false;
                 GetConsumed();
                 consumedTime = Time.time;
+
+                GameObject.FindWithTag("GameController").
+                    GetComponent<LevelController>().RegisterChange();
             }
         }
 

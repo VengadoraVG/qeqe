@@ -3,7 +3,7 @@ using System.Collections;
 using Lvl;
 
 public class Preview : MonoBehaviour {
-    public PreviewController controller;
+    public UIController controller;
     public PreviewMark mark;
     public bool hasMouseFocus;
 
@@ -26,26 +26,16 @@ public class Preview : MonoBehaviour {
         _deletionMark = transform.GetChild(0).Find("delete mark").gameObject;
         _confirmationMark = transform.GetChild(0).Find("confirmation mark").gameObject;
 
-        Unmark();
+        controller = GameObject.FindWithTag("GameController").
+            GetComponent<UIController>();
+        SetMark(PreviewMark.normal);
     }
 
-    public void SetMark (Color color, PreviewMark mark) {
+    public void SetMark (PreviewMark mark) {
+        _outerBorder.color = controller.GetColor(mark);
         _confirmationMark.SetActive(mark == PreviewMark.toSelect);
         _deletionMark.SetActive(mark == PreviewMark.toDelete);
-        _outerBorder.color = color;
         this.mark = mark;
-    }
-
-    public void MarkForDeletion () {
-        SetMark(controller.danger, PreviewMark.toDelete);
-    }
-
-    public void MarkForSelection () {
-        SetMark(controller.selected, PreviewMark.toSelect);
-    }
-
-    public void Unmark () {
-        SetMark(controller.normal, PreviewMark.normal);
     }
 
     public void Delete () {
@@ -61,7 +51,7 @@ public class Preview : MonoBehaviour {
     }
 
     public void Initialize (LevelLink link) {
-        // transform.GetChild(0).Find("preview renderer")
-        //     .GetComponent<Map.PreviewMapRenderer>().SetPreviewSource(new Level(link.initial));
+        transform.GetChild(0).Find("map renderer")
+            .GetComponent<Map.MapPreviewer>().SetPreviewSource(link.initial);
     }
 }

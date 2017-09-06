@@ -15,7 +15,11 @@ namespace Lvl {
 
         public UndoScreen uundoScreen;
 
+        public bool changed = false;
+
         public static LevelController instance;
+
+        private LevelStatus initialState;
 
         void Start () {
             chain = new ChainOfLevels();
@@ -59,6 +63,7 @@ namespace Lvl {
         }
 
         public void Load (int lvlIndex) {
+            initialState = new LevelLink().initial;
             mapRenderer.SetLvlStatus(levels[lvlIndex]);
             mapRenderer.Initialize();
             CountBones();
@@ -75,9 +80,12 @@ namespace Lvl {
             }
         }
 
+        public void ExitLevel () {
+            
+        }
+
         public void EnterLevel (int lvlIndex) {
-            chain.AddBeginning();
-            // uundoScreen.Initialize(chain);
+            initialState = new LevelLink().initial;
         }
 
         public void NextLevel () {
@@ -90,27 +98,34 @@ namespace Lvl {
             return new LevelStatus(instance.levels[instance.currentLevel]);
         }
 
-        public void ResetLevel () {
-            currentLevel = chain.Last().index;
-            levels[chain.Last().index].Load(chain.Last().initial);
-            mapRenderer.ResetTo(levels[chain.Last().index]);
-            Qeqe.Controller.Energy = chain.Last().initial.energy;
+        public void ResetLevel (LevelStatus status, int index) {
+            levels[index].Load(status);
+            mapRenderer.ResetTo(levels[currentLevel]);
+            Qeqe.Controller.Energy = status.energy;
+            Load(index);
+        }
 
-            Load(currentLevel);
+        public void ResetLevel () {
+            changed = false;
+            ResetLevel(initialState, currentLevel);
         }
 
         public void UndoLevel () {
-            if (chain.CanUndo()) {
-                ResetLevel();
-                chain.Pop();
-                ResetLevel();
-            } else {
-                Debug.Log("Can't undo :(" + Time.time);
-            }
+            // if (chain.CanUndo()) {
+            //     ResetLevel();
+            //     LevelStatus status = chain.Pop().initial;
+            //     ResetLevel(status, status.lvlIndex);
+            // } else {
+            //     Debug.Log("Can't undo :(" + Time.time);
+            // }
         }
 
         public string GetNameOfCurrentLevel () {
             return rawLevels[currentLevel].name;
+        }
+
+        public void RegisterChange () {
+            changed = true;
         }
     }
 }

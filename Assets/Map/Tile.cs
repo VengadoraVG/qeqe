@@ -29,6 +29,8 @@ namespace Map {
                 elapsedTime += Time.deltaTime;
             } while (elapsedTime < hp);
 
+            GameObject.FindWithTag("GameController").
+                GetComponent<Lvl.LevelController>().RegisterChange();
             mapRenderer.Destroy(this);
             Consumer.instance.ConsumeEnergy();
         }
