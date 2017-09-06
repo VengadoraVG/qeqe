@@ -13,7 +13,7 @@ namespace Lvl {
         public ChainOfLevels chain;
         public int boneCount;
 
-        public Map.Previewer ppreviewer;
+        public UndoScreen uundoScreen;
 
         public static LevelController instance;
 
@@ -77,10 +77,10 @@ namespace Lvl {
 
         public void EnterLevel (int lvlIndex) {
             chain.AddBeginning();
+            // uundoScreen.Initialize(chain);
         }
 
         public void NextLevel () {
-            ppreviewer.SetPreviewSource(levels[currentLevel]);
             currentLevel = (currentLevel + 1) % levels.Length;
             Load(currentLevel);
             EnterLevel(currentLevel);
