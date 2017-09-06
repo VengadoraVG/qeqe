@@ -3,21 +3,12 @@ using System.Collections;
 
 namespace Lvl {
     public class LevelLink {
-        public LevelStatus initial;
-        public LevelStatus final;
+        public LevelStatus status;
         public int index; // index of the level the link comes from.
 
-        public LevelLink () {
-            initial = LevelController.GetCurrentLevelStatus();
+        public LevelLink (LevelStatus status) {
+            this.status = status;
             index = LevelController.instance.currentLevel;
-        }
-
-        public void SetFinal (Level lvl) {
-            final = new LevelStatus(lvl);
-        }
-
-        public void Undo () {
-            final = null;
         }
     }
 }

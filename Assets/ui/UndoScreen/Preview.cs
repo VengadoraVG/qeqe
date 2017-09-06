@@ -52,6 +52,6 @@ public class Preview : MonoBehaviour {
 
     public void Initialize (LevelLink link) {
         transform.GetChild(0).Find("map renderer")
-            .GetComponent<Map.MapPreviewer>().SetPreviewSource(link.initial);
+            .GetComponent<Map.MapPreviewer>().SetPreviewSource(link.status);
     }
 }

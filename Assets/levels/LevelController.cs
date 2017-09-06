@@ -63,7 +63,8 @@ namespace Lvl {
         }
 
         public void Load (int lvlIndex) {
-            initialState = new LevelLink().initial;
+            ExitLevel();
+            currentLevel = lvlIndex;
             mapRenderer.SetLvlStatus(levels[lvlIndex]);
             mapRenderer.Initialize();
             CountBones();
@@ -81,16 +82,18 @@ namespace Lvl {
         }
 
         public void ExitLevel () {
-            
+            if (changed) {
+                chain.Add(initialState);
+            }
+            changed = false;
         }
 
         public void EnterLevel (int lvlIndex) {
-            initialState = new LevelLink().initial;
+            initialState = new LevelStatus(levels[currentLevel]);
         }
 
         public void NextLevel () {
-            currentLevel = (currentLevel + 1) % levels.Length;
-            Load(currentLevel);
+            Load((currentLevel + 1) % levels.Length);
             EnterLevel(currentLevel);
         }
 
@@ -99,6 +102,7 @@ namespace Lvl {
         }
 
         public void ResetLevel (LevelStatus status, int index) {
+            changed = false;
             levels[index].Load(status);
             mapRenderer.ResetTo(levels[currentLevel]);
             Qeqe.Controller.Energy = status.energy;
@@ -106,7 +110,6 @@ namespace Lvl {
         }
 
         public void ResetLevel () {
-            changed = false;
             ResetLevel(initialState, currentLevel);
         }
 

@@ -4,14 +4,10 @@ using System.Collections.Generic;
 
 namespace Lvl {
     public class ChainOfLevels {
-        public Stack<LevelStatus> chain = new Stack<LevelStatus>();
+        public Stack<LevelLink> chain = new Stack<LevelLink>();
 
-        public void AddBeginning () {
-            chain.Push(new LevelLink());
-        }
-
-        public void SetFinal (Level lvl) {
-            chain.Peek().SetFinal(lvl);
+        public void Add (LevelStatus status) {
+            chain.Push(new LevelLink(status));
         }
 
         public LevelLink Last () {
