@@ -6,6 +6,10 @@ public class Preview : MonoBehaviour {
     public UIController controller;
     public PreviewMark mark;
     public bool hasMouseFocus;
+    [HideInInspector]
+    public int index;
+    [HideInInspector]
+    public UndoScreen undoScreen;
 
     private SpriteRenderer _outerBorder;
     private GameObject _deletionMark;
@@ -18,6 +22,12 @@ public class Preview : MonoBehaviour {
 
     void OnTriggerExit2D (Collider2D c) {
         hasMouseFocus = false;
+    }
+
+    void Update () {
+        if (Input.GetMouseButtonDown(0) && hasMouseFocus) {
+            undoScreen.Select(index);
+        }
     }
 
     void Start () {
@@ -50,8 +60,9 @@ public class Preview : MonoBehaviour {
         }
     }
 
-    public void Initialize (LevelLink link) {
+    public void Initialize (LevelLink link, int index=0) {
         transform.GetChild(0).Find("map renderer")
             .GetComponent<Map.MapPreviewer>().SetPreviewSource(link.status);
+        this.index = index;
     }
 }

@@ -19,7 +19,7 @@ namespace Lvl {
         }
 
         public bool CanUndo () {
-            return chain.Count > 1;
+            return chain.Count > 0;
         }
     }
 }

@@ -68,6 +68,7 @@ namespace Lvl {
             mapRenderer.SetLvlStatus(levels[lvlIndex]);
             mapRenderer.Initialize();
             CountBones();
+            EnterLevel(lvlIndex);
         }
 
         public void CountBones () {
@@ -94,7 +95,6 @@ namespace Lvl {
 
         public void NextLevel () {
             Load((currentLevel + 1) % levels.Length);
-            EnterLevel(currentLevel);
         }
 
         public static LevelStatus GetCurrentLevelStatus () {
@@ -104,7 +104,7 @@ namespace Lvl {
         public void ResetLevel (LevelStatus status, int index) {
             changed = false;
             levels[index].Load(status);
-            mapRenderer.ResetTo(levels[currentLevel]);
+            mapRenderer.ResetTo(levels[index]);
             Qeqe.Controller.Energy = status.energy;
             Load(index);
         }
@@ -114,13 +114,12 @@ namespace Lvl {
         }
 
         public void UndoLevel () {
-            // if (chain.CanUndo()) {
-            //     ResetLevel();
-            //     LevelStatus status = chain.Pop().initial;
-            //     ResetLevel(status, status.lvlIndex);
-            // } else {
-            //     Debug.Log("Can't undo :(" + Time.time);
-            // }
+            if (chain.CanUndo()) {
+                ResetLevel();
+                LevelLink popped = chain.Pop();
+                levels[popped.status.lvlIndex].Load(popped.status);
+                ResetLevel(popped.status, popped.status.lvlIndex);
+            }
         }
 
         public string GetNameOfCurrentLevel () {

@@ -12,6 +12,7 @@ namespace Lvl {
             this.W = Util.Clone(lvl.W);
             this.B = Util.Clone(lvl.B);
             energy = Qeqe.Controller.Energy;
+            lvlIndex = lvl.lvlIndex;
         }
     }
 }
