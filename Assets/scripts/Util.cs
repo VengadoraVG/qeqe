@@ -33,4 +33,11 @@ public class Util {
     public static T LastOf<T> (List<T> list) {
         return list[list.Count - 1];
     }
+
+    public static void CopyTransform (Transform original, Transform copy) {
+        copy.position = original.position;
+        copy.localScale = original.localScale;
+        copy.rotation = original.rotation;
+        copy.parent = original.parent;
+    }
 }
