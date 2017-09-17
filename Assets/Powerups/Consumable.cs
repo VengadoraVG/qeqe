@@ -1,31 +1,32 @@
 using UnityEngine;
 using System.Collections;
-using Lvl;
+
+using Matrix;
 
 namespace Powerup {
     public abstract class Consumable : MonoBehaviour {
         public int row;
         public int column;
-        public Level level;
+        public Matrix.Controller owner;
+        public Consumer lastConsumer;
 
-        private float consumedTime = -1;
+        private bool _isConsumed = false;
 
         void OnTriggerEnter2D (Collider2D c) {
-            if (consumedTime != Time.time) {
+            if (!_isConsumed) {
+                _isConsumed = true;
+                lastConsumer = Util.FindComponent<Consumer>(c.transform);
+
                 GetComponent<Animator>().SetTrigger("Explode");
                 GetComponent<Collider2D>().enabled = false;
                 GetConsumed();
-                consumedTime = Time.time;
-
-                GameObject.FindWithTag("GameController").
-                    GetComponent<LevelController>().RegisterChange();
             }
         }
 
-        public void Initialize (int row, int column, Level level) {
+        public void Initialize (int row, int column, Matrix.Controller owner) {
             this.row = row;
             this.column = column;
-            this.level = level;
+            this.owner = owner;
         }
 
         public abstract void GetConsumed ();

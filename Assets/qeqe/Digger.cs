@@ -1,71 +1,68 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using MatrixRenderer;
 using QeqeInput;
-using Map;
 
 namespace Qeqe {
     public class Digger : MonoBehaviour {
         public Raycaster bellowDigger;
         public Raycaster frontalDigger;
         public bool isDigging = false;
-
         public ParticleSystem dust;
-
         public Movement movement;
-
         public Tile digged;
+
+        private Qeqe.Controller _controller;
 
         void Start () {
             movement = GetComponent<Movement>();
+            _controller = GetComponent<Qeqe.Controller>();
         }
-        
-        void Update () {
-            if (movement.IsStandingStill()) {
-                Tile newDiggedTile = GetDiggedTile();
 
-                if (digged != newDiggedTile) {
-                    if (digged != null) {
-                        digged.StopGettingDigged();
+        void Update () {
+            if (_controller.CanDig && movement.IsStandingStill()) {
+                Tile currentlyDiggedTile = GetDiggedTile();
+
+                if (digged != currentlyDiggedTile) {
+                    if (digged != null)  {
+                        _controller.matrixController.StopGettingDigged(digged.row, digged.column, this);
                     }
 
-                    if (newDiggedTile != null && Consumer.instance.CanDig()) {
+                    if (currentlyDiggedTile != null &&
+                        _controller.matrixController.CanDig(this, currentlyDiggedTile)) {
+
                         isDigging = true;
-                        newDiggedTile.StartGettingDigged();
+                        _controller.matrixController.
+                            StartGettingDigged(currentlyDiggedTile.row, currentlyDiggedTile.column, this);
                         dust.Play();
                     }
-                    digged = newDiggedTile;
+
+                    digged = currentlyDiggedTile;
                 }
             } else {
                 if (digged != null) {
-                    digged.StopGettingDigged();
+                    _controller.matrixController.StopGettingDigged(digged.row, digged.column, this);
                     digged = null;
                 }
             }
 
-            if (digged == null) {
-                isDigging = false;
-            }
-
-            if (!isDigging) {
-                movement.Unblock();
-            } else {
+            isDigging = (digged != null);
+            if (isDigging) {
                 movement.Block();
+            } else {
+                movement.Unblock();
+                dust.Stop();
             }
 
             movement.animator.SetBool("IsDigging", isDigging);
-            if (!isDigging) {
-                dust.Stop();
-            }
         }
 
         public Tile GetDiggedTile () {
             try {
-                if (Verbs.BelowDig) {
+                if (Verbs.BellowDig) {
                     return bellowDigger.GetImpacted().GetComponent<Tile>();
-                }
-
-                if (Verbs.FrontalDig) {
+                } else if (Verbs.FrontalDig) {
                     return frontalDigger.GetImpacted().GetComponent<Tile>();
                 }
             } catch (NullReferenceException) {}

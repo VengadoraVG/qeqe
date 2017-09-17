@@ -9,10 +9,9 @@ namespace Powerup {
         public override void GetConsumed () {
             theSprite.GetComponent<Animator>().SetTrigger("GetConsumed");
             theSprite.GetComponent<SpriteRenderer>().sortingLayerName = "Indicators";
-            Consumer.instance.ConsumeBone();
             Destroy(theArrow);
-            level.RemoveBone(row, column);
-            Lvl.LevelController.instance.CountBones();
+
+            this.owner.TriggerBoneEaten(this.row, this.column, this.lastConsumer);
         }
     }
 }

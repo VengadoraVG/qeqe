@@ -1,27 +1,14 @@
 using UnityEngine;
-using System;
 using System.Collections;
 
 namespace Qeqe {
     public class Controller : MonoBehaviour {
-        public static Controller instance;
-        public static int Energy {
+        public int energy;
+        public Matrix.Controller matrixController;
+        public bool CanDig {
             get {
-                try {
-                    return instance.GetComponent<Consumer>().energy;
-                } catch (NullReferenceException) {
-                    return 0; // TODO: modify with perma-persistence
-                }
+                return GetComponent<Powerup.Consumer>().CanDig;
             }
-            set {
-                try {
-                    instance.GetComponent<Consumer>().SetEnergy(value);
-                } catch (NullReferenceException) {}
-            }
-        }
-
-        void Start () {
-            instance = this;
         }
     }
 }

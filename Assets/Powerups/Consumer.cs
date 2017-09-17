@@ -2,34 +2,44 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-public class Consumer : MonoBehaviour {
-    public static Consumer instance;
-    public int multiplier = 3;
-    public int energy = 0;
+namespace Powerup {
+    public class Consumer : MonoBehaviour {
+        public int multiplier = 3;
+        public int energy = 0;
+        public Text energyIndicator;
 
-    public Text energyIndicator;
+        public bool CanDig {
+            get {
+                return energy > 0;
+            }
+        }
 
-    void Start () {
-        instance = this;
-    }
-    
-    void Update () {
-        energyIndicator.text = energy + "";
-    }
+        void Start () {
+            World.Controller world = GameObject.FindWithTag("world controller").
+                GetComponent<World.Controller>();
+            world.OnBoneEaten += ConsumeBone;
+            world.OnTileDigged += ConsumeEnergy;
+        }
 
-    public void ConsumeBone () {
-        energy += multiplier;
-    }
+        void Update () {
+            energyIndicator.text = energy + "";
+        }
 
-    public bool CanDig () {
-        return energy > 0;
-    }
+        public void ConsumeBone (int row, int column, Matrix.Controller matrix, Powerup.Consumer eater) {
+            Debug.Log("me: " + this + ", he: " + eater);
+            if (eater == this) {
+                energy += multiplier;
+            }
+        }
 
-    public void ConsumeEnergy () {
-        energy--;
-    }
+        public void ConsumeEnergy (int row, int column, Matrix.Controller matrix, Qeqe.Digger consumer) {
+            if (consumer == GetComponent<Qeqe.Digger>()) {
+                energy--;
+            }
+        }
 
-    public void SetEnergy (int energy) {
-        this.energy = energy;
+        public void SetEnergy (int energy) {
+            this.energy = energy;
+        }
     }
 }

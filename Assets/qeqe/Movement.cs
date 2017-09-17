@@ -72,7 +72,11 @@ namespace Qeqe {
         }
 
         public void XAxisMovementUpdate () {
-            float x = Input.GetAxis("Horizontal") * maxSpeed;
+            float x = 0;
+
+            if (!Verbs.FrontalDig) {
+                x = Input.GetAxis("Horizontal") * maxSpeed;
+            }
             body.velocity = new Vector2(x, body.velocity.y);
         }
 
