@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Matrix</title>
+    <link rel="stylesheet" href="../style.css" type="text/css" media="screen" />
+  </head>
+
+  <body>
+    <div class="doc-container">
+      <h1>Matrix</h1>
+      <p>Llamamos "matriz lógica" a los datos que representan a un nivel en forma de números. Este paquete se encarga de actualizar inteligentemente la matriz lógica del juego.</p>
+
+
+      <h2>Controller</h2>
+      <p>Cada nivel tiene su propio Matrix.Controller, y cualquier clase de fuera de este paquete que quiera comunicarse con este paquete debe hacerlo mediante el Matrix.Controller</p>
+
+      <p>Puede funcionar en modo edición, para ello es necesario poner <code class="inline-code">update</code> en <code>true</code></p>
+
+      <p><b>_renderer : <code class="type">MapRenderer</code></b>
+        Se inicializa una sola vez para renderizar la matriz lógica.</p>
+
+      <p><b>testLvl: <code class="type">TextAsset</code></b>
+        Un nivel expresado en una cadena de texto separada en líneas en la que cada símbolo representa algo concreto en el mapa. Véase <a href="#parser">parser</a></p>
+
+      <p><b>status : <code class="type">Status</code></b>
+        El estado del nivel.</p>
+
+      <p><b>update : <code class="type">bool</code></b>
+        Debería la matriz actualizarse y renderizarse en el editor?</p>
+
+      <p><b>OnTileDigged : <code class="type">evento (int row, int column, Matrix.Controller matrix, Qeqe.Digger digger)</code></b>
+        <i>Este evento se dispara con TriggerTileDigged</i></p>
+      
+      <p>Se dispara cada vez que un tile es destruido mediante excavación.</p>
+
+      <p>Más adelante se implementará un multijugador de tipo coach, este evento se dispara independientemente del qeqe que excave, o del nivel en el que se encuentre.</p>
+
+      <ul>
+        
+        <li><b>row, column</b>: la fila y columna del tile que fue excavado.</li>
+
+        <li><b>matrix</b>: el nivel al que pertenece el tile que fue excavado.</li>
+
+        <li><b>digger</b>: el componente Digger del qeqe que excavó el tile.</li>
+      </ul>
+
+      <p><b>OnBoneEaten : <code class="type">evento (int row, int column, Matrix.Controller matrix, Consumer consumer)</code></b>
+        <i>Este evento se dispara con TriggerBoneEaten</i></p>
+
+      <p>Se dispara cada vez que un hueso es devorado.</p>
+
+      <p>Más adelante se implementará un multijugador de tipo coach, este evento se dispara independientemente del qeqe que coma, o del nivel en el que se encuentre el hueso.</p>
+
+      <ul>
+        <li><b>row, column</b>: la fila y columna del hueso que fue devorado.</li>
+
+        <li><b>matrix</b>: el nivel al que pertenece el hueso que fue devorado.</li>
+
+        <li><b>digger</b>: el componente Consumer del qeqe que devoró el hueso.</li>
+      </ul>
+
+      <p><b>StartGettingDigged</b>
+        Inicia una corrutina que excava el tile luego de esperar el tiempo dictado por su hp. Este método registra al digger que inició la excavación.</p>
+
+      <p><b>StopGettingdigged</b>
+        Inicia una corrutina que cancela la excavación del tile, si y solo si el método ha sido invocado por el mismo digger que inició la excavación.</p>
+
+      <p><b>CanDig (Qeqe.Digger digger, Tile tile) : bool</b>
+        Indica si el qeqe digger puede excavar el tile. El qeqe no puede excavar el tile si ya está siendo excavado por otro qeqe.</p>
+
+      <h2>DigAction</h2>
+      <p>Contiene información sobre el corto periodo de excavación de un tile. El digger es el que inició la excavación, y la corrutina, es el contador que espera a que el hp del tile se agote para destruirlo.</p>
+
+      <p>Es usado por el diccionario _diggingCoroutine de Matrix.Digger que lleva un registro de las excavaciones junto con sus excavadores y contadores.</p>
+
+      <h2>Digger</h2>
+      <p>Controla las excavaciones en la matriz lógica.</p>
+
+      <p><b>_diggingCoroutine: Dictionary&lt;Vector2, DigAction&gt;</b>: mapea la posición (en fila, columna) del tile siendo excavado con el excavador y la corrutina que causará (de no ser cancelada) que el tile se destruya por excavación.</p>
+
+      <p><b>GetDigger(int row, int col): Qeqe.Digger</b> Devuelve al digger que está excavando el tile en la fila y columna indicada. Si el tile no está siendo excavado, devuelve null.</p>
+
+      <p><b>StartGettingDigged (int row, int column, Qeqe.Digger digger)</b>: Comienza a excavar el tile en la fila y columna determinada, registrando como excavador al digger.</p>
+    </div>
+  </body>
+</html>

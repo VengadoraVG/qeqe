@@ -1,0 +1,17 @@
+.doc-container {
+    margin: auto;
+    max-width: 500px;
+    text-align: justify;
+    font-family: helvetica;
+}
+
+.doc-container li {
+    padding: 0.5em 0 0.5em 0;
+}
+
+h2 {
+    color: white;
+    background-color: black;
+    padding: 0.5em;
+    border-radius: 5px;
+}

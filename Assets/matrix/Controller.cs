@@ -10,6 +10,7 @@ namespace Matrix {
     [ExecuteInEditMode]
     public class Controller : MonoBehaviour{
         public TextAsset testLvl;
+        [HideInInspector]
         public Status status;
         public bool update = false;
         public MapRenderer _renderer;

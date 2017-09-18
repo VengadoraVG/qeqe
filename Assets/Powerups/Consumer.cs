@@ -26,7 +26,6 @@ namespace Powerup {
         }
 
         public void ConsumeBone (int row, int column, Matrix.Controller matrix, Powerup.Consumer eater) {
-            Debug.Log("me: " + this + ", he: " + eater);
             if (eater == this) {
                 energy += multiplier;
             }
