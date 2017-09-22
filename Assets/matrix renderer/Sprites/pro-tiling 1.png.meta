@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 11b3043e2e545404d88fdbe4c0493720
-timeCreated: 1506110404
+guid: 579c38f922431c340a822eaaae314b11
+timeCreated: 1506110606
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: pro-tiling_0
+    21300000: tile_pivoted
     21300002: pro-tiling_1
     21300004: pro-tiling_2
   serializedVersion: 4
@@ -81,41 +81,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pro-tiling_0
+      name: tile_pivoted
       rect:
         serializedVersion: 2
-        x: 8
-        y: 8
-        width: 124
-        height: 124
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: pro-tiling_1
-      rect:
-        serializedVersion: 2
-        x: 140
-        y: 0
-        width: 140
-        height: 140
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: pro-tiling_2
-      rect:
-        serializedVersion: 2
-        x: 280
-        y: 0
-        width: 140
-        height: 140
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 10
+        y: 10
+        width: 120
+        height: 120
+      alignment: 1
+      pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

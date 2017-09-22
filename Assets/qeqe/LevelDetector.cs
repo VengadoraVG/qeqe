@@ -8,8 +8,6 @@ namespace Qeqe{
             if (matrix != null) {
                 Util.FindComponent<Qeqe.Controller>(transform).matrixController = matrix;
             }
-
-            Debug.Log(c);
         }
     }
 }

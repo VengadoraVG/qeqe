@@ -2,41 +2,62 @@ using UnityEngine;
 using System.Collections;
 using Powerup;
 
-public class Hider : MonoBehaviour {
-    public GameObject matrixRenderer;
-    public float hidingAlpha = 0.2f;
+namespace MatrixRenderer {
+    public class Hider : MonoBehaviour {
+        public float hidingAlpha = 1;
+        public bool active;
+        public SpriteRenderer curtain;
 
-    void Start () {
-        OnTriggerExit2D(null);
-    }
+        public Color hidedColor;
+        public Color shownColor;
+        public float opacityTransitionTime = 1.5f;
 
-    void OnTriggerExit2D (Collider2D c) {
-        Util.ForEachChildren(this.transform, HideChildrenAction, this);
-    }
+        void Start () {
+            OnTriggerExit2D(null);
+        }
 
-    void OnTriggerEnter2D (Collider2D c) {
-        Util.ForEachChildren(this.transform, ShowChildrenAction, this);
-    }
+        void OnTriggerExit2D (Collider2D c) {
+            active = false;
+            StartHiding();
+        }
 
-    public void HideChildrenAction (Object caller, Transform child) {
-        try {
-            child.gameObject.GetComponent<Bone>().HideWithMap();
-        } catch (System.NullReferenceException) {}
+        void OnTriggerEnter2D (Collider2D c) {
+            active = true;
+            StartUnhiding();
+        }
 
-        try {
-            SpriteRenderer sr = child.gameObject.GetComponent<SpriteRenderer>();
-            sr.color = sr.color * new Color(1,1,1, 0) + new Color(0,0,0, hidingAlpha);
-        } catch (MissingComponentException) {}
-    }
+        public void RefreshSize () {
+            BoxCollider2D collider = GetComponent<BoxCollider2D>();
+            Vector2 tileSize = transform.parent.GetComponent<TileController>().size;
 
-    public void ShowChildrenAction (Object caller, Transform child) {
-        try {
-            SpriteRenderer sr = child.gameObject.GetComponent<SpriteRenderer>();
-            sr.color = sr.color * new Color(1,1,1, 0) + new Color(0,0,0, 1);
-        } catch (MissingComponentException) {}
+            curtain.transform.position = transform.position -
+                Vector3.Scale((Vector3) tileSize/2, new Vector3(1,-1,1));
+            collider.size = curtain.size = GetComponent<MapRenderer>().Size;
+            collider.offset = Vector2.Scale(collider.size/2, new Vector2(1, -1)) -
+                Vector2.Scale(tileSize/2, new Vector2(1, -1));
+        }
 
-        try {
-            child.gameObject.GetComponent<Bone>().ShowWithMap();
-        } catch (System.NullReferenceException) {}
+        public void StartUnhiding () {
+            StopAllCoroutines();
+            StartCoroutine(_StartOpacityTransition(false));
+        }
+
+        public void StartHiding () {
+            StopAllCoroutines();
+            StartCoroutine(_StartOpacityTransition(true));
+        }
+
+        private IEnumerator _StartOpacityTransition (bool hide) {
+            float elapsedTime = 0;
+            Color initial = curtain.color;
+            Color desired = hide? hidedColor : shownColor;
+
+            while (elapsedTime < opacityTransitionTime) {
+                yield return null;
+                elapsedTime += Time.deltaTime;
+                curtain.color = Color.Lerp(initial, desired,
+                                           elapsedTime / opacityTransitionTime);
+            }
+        }
     }
 }

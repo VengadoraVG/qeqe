@@ -9,6 +9,13 @@ namespace MatrixRenderer {
         public Bone[,] bones;
         public GameObject fatherOfTiles;
 
+        public Vector2 Size {
+            get {
+                return new Vector2(_controller.status.W.GetLength(1) * _TileController.size.x,
+                                   _controller.status.W.GetLength(0) * _TileController.size.y);
+            }
+        }
+
         private Matrix.Controller _Controller {
             get {
                 if (_controller == null) {
@@ -79,6 +86,7 @@ namespace MatrixRenderer {
 
         public void Initialize (Matrix.Controller controller) {
             _Controller.OnTileDigged += Dig;
+            GetComponent<Hider>().RefreshSize();
             Render();
         }
 
