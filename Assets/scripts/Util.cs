@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Util {
+    public delegate void ForEachChildrenAction (Object caller, Transform child);
+
     public static string Prettify<T> (T[,] M) {
         string pretty = "";
 
@@ -55,5 +57,14 @@ public class Util {
         if (child.gameObject.CompareTag(tag)) return child.gameObject;
 
         return FindTag(child.parent, tag);
+    }
+
+    public static void ForEachChildren (Transform parent, ForEachChildrenAction action, Object caller) {
+        if (parent == null) return;
+
+        action(caller, parent);
+        foreach (Transform child in parent) {
+            ForEachChildren(child, action, caller);
+        }
     }
 }

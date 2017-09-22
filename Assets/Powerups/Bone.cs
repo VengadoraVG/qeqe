@@ -13,5 +13,13 @@ namespace Powerup {
 
             this.owner.TriggerBoneEaten(this.row, this.column, this.lastConsumer);
         }
+
+        public void HideWithMap () {
+            this.gameObject.SetActive(!this.owner.status.W[this.row, this.column]);
+        }
+
+        public void ShowWithMap () {
+            this.gameObject.SetActive(true);
+        }
     }
 }
