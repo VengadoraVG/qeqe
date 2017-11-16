@@ -7,8 +7,20 @@ namespace Matrix {
         public bool[,] W; // true <=> floor
         public float[,] hp; // hp[i,j] says how much hp W[i,j] has (for digging)
         public bool[,] B; // true <=> bone
+        public Qeqe.Status qeqe;
 
-        // TODO: is this useless now?
-        public Vector2 qeqe; // qeqe's position
+        public Status () {}
+
+        public Status (Status father, GameObject qeqe) {
+            Get(father);
+            this.qeqe = new Qeqe.Status(qeqe);
+        }
+
+        public void Get (Status original) {
+            W = Util.Clone(original.W);
+            hp = Util.Clone(original.hp);
+            B = Util.Clone(original.B);
+            qeqe = original.qeqe;
+        }
     }
 }

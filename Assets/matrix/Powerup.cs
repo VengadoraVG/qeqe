@@ -14,5 +14,10 @@ namespace Matrix {
             status.B[row, col] = false;
             return true;
         }
+
+        public void AddBone (int row, int col) {
+            Matrix.Status status = GetComponent<Controller>().status;
+            status.B[row, col] = true;
+        }
     }
 }

@@ -6,7 +6,8 @@ using MatrixRenderer;
 namespace Matrix {
     public delegate void TileDigged (int row, int column, Matrix.Controller matrix, Qeqe.Digger digger);
     public delegate void BoneEaten (int row, int column, Matrix.Controller matrix, Consumer consumer);
-
+    public delegate void LittleChangeDelegate (int row, int column, Matrix.Controller matrix, LittleChange.Type change);
+    
     [ExecuteInEditMode]
     public class Controller : MonoBehaviour{
         public TextAsset testLvl;
@@ -15,11 +16,12 @@ namespace Matrix {
         public bool update = false;
         public MapRenderer _renderer;
 
-        public int Width { get { return status.W.GetLength(0); } } 
-        public int Height { get { return status.W.GetLength(1); } } 
+        public int Width { get { return status.W.GetLength(0); } }
+        public int Height { get { return status.W.GetLength(1); } }
 
         public event TileDigged OnTileDigged;
         public event BoneEaten OnBoneEaten;
+        public event LittleChangeDelegate OnLittleChange;
 
         void Awake () {
             GameObject.FindWithTag("world controller").
@@ -55,6 +57,18 @@ namespace Matrix {
             GetComponent<Matrix.Powerup>().RemoveBone(row, col);
             if (OnBoneEaten != null) {
                 OnBoneEaten(row, col, this, eater);
+            }
+        }
+
+        public void TriggerLittleChange (int row, int col, LittleChange.Type change) {
+            switch (change) {
+                case LittleChange.Type.bone:
+                    GetComponent<Matrix.Powerup>().AddBone(row, col);
+                    break;
+            }
+
+            if (OnLittleChange != null) {
+                OnLittleChange(row, col, this, change);
             }
         }
 

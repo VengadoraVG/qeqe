@@ -47,9 +47,6 @@ namespace Matrix {
                     status.W[i,j] = !_IsVoid(symbol);
                     status.hp[i,j] = _IsIndestructible(symbol)? (!_IsVoid(symbol)? Mathf.Infinity: 0): 1;
                     status.B[i,j] = _IsBone(symbol);
-                    if (_IsQeqe(symbol)) {
-                        status.qeqe = new Vector2(j, i);
-                    }
                 }
             }
 

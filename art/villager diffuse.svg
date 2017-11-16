@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1365.333374023438"
+   height="1365.333374023438"
+   viewBox="0 0 361.2444458007812 361.2444458007813"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="villager diffuse.svg"
+   inkscape:export-filename="D:\deving-games\qeqe\art\villager diffuse.png"
+   inkscape:export-xdpi="95.9765625"
+   inkscape:export-ydpi="95.9765625">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.4326195300429564"
+     inkscape:cx="341.7567586059997"
+     inkscape:cy="556.2535775365475"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1027"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:snap-global="false"
+     units="px" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Layer 2">
+    <g
+       id="g4505">
+      <rect
+         style="opacity:1;vector-effect:none;fill:#eac086;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         id="rect4502"
+         width="728.9768676757812"
+         height="1404.015991210938"
+         x="-24.51715850830078"
+         y="-12.53098678588867"
+         transform="scale(0.2645833333333333)" />
+      <rect
+         transform="matrix(0.2645833333333333,0,0,0.2645833333333333,51.02974211374918,-13.11782615979513)"
+         y="49.57918548583984"
+         x="-192.8683166503906"
+         height="13.07581806182861"
+         width="13.07581806182861"
+         id="rect4499"
+         style="opacity:1;vector-effect:none;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal" />
+      <rect
+         style="opacity:1;vector-effect:none;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         id="rect4501"
+         width="13.07581806182861"
+         height="13.07581806182861"
+         x="-192.8683166503906"
+         y="49.57918548583984"
+         transform="matrix(0.2645833333333333,0,0,0.2645833333333333,408.8145443856716,344.6669761121274)" />
+    </g>
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g4505"
+       id="use4507"
+       transform="matrix(-1,0,0,1,361.2444458007812,0)"
+       width="100%"
+       height="100%" />
+  </g>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(45.26367479858638,52.49607703322329)">
+    <image
+       sodipodi:absref="D:\models\villager uvLayout.png"
+       id="image4493"
+       xlink:href="file:///D:/models/villager%20uvLayout.png"
+       preserveAspectRatio="none"
+       height="1365.333374023438"
+       width="1365.333374023438"
+       transform="matrix(0.2645833333333333,0,0,0.2645833333333333,-45.26367479858638,-52.49607703322323)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#image4493"
+       id="use4496"
+       transform="matrix(-1,0,0,1,270.717105613195,0)"
+       width="100%"
+       height="100%" />
+  </g>
+</svg>

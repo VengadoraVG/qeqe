@@ -18,11 +18,11 @@ public class Util {
         return pretty;
     }
 
-    public static int[,] Clone (int[,] M) {
-        return CloneInto(M, new int[M.GetLength(0), M.GetLength(1)]);
+    public static T[,] Clone<T> (T[,] M) {
+        return CloneInto(M, new T[M.GetLength(0), M.GetLength(1)]);
     }
 
-    public static int[,] CloneInto (int[,] M, int[,] c) {
+    public static T[,] CloneInto<T> (T[,] M, T[,] c) {
         for (int i=0; i<c.GetLength(0); i++) {
             for (int j=0; j<c.GetLength(1); j++) {
                 c[i, j] = M[i, j];

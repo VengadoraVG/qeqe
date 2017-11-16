@@ -86,7 +86,12 @@ namespace MatrixRenderer {
 
         public void Initialize (Matrix.Controller controller) {
             _Controller.OnTileDigged += Dig;
+            _Controller.OnLittleChange += HandleLittleChange;
             GetComponent<Hider>().RefreshSize();
+            Render();
+        }
+
+        public void HandleLittleChange (int row, int column, Matrix.Controller matrix, LittleChange.Type change) {
             Render();
         }
 

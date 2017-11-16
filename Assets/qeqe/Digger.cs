@@ -7,13 +7,20 @@ using QeqeInput;
 namespace Qeqe {
     public class Digger : MonoBehaviour {
         public Raycaster bellowDigger;
+        public LevelDetector bellowLvlDetector;
         public Raycaster frontalDigger;
+        public LevelDetector frontalLvlDetector;
         public bool isDigging = false;
         public ParticleSystem dust;
         public Movement movement;
         public Tile digged;
 
         private Qeqe.Controller _controller;
+        private Matrix.Controller _tileOwner;
+
+        void OnTriggerEnter2D (Collider2D c) {
+            _tileOwner = Util.FindComponent<Matrix.Controller>(c.transform);
+        }
 
         void Start () {
             movement = GetComponent<Movement>();
@@ -26,15 +33,15 @@ namespace Qeqe {
 
                 if (digged != currentlyDiggedTile) {
                     if (digged != null)  {
-                        _controller.matrixController.StopGettingDigged(digged.row, digged.column, this);
+                        _tileOwner.StopGettingDigged(digged.row, digged.column, this);
                     }
 
                     if (currentlyDiggedTile != null &&
-                        _controller.matrixController.CanDig(this, currentlyDiggedTile)) {
+                        _tileOwner.CanDig(this, currentlyDiggedTile)) {
 
                         isDigging = true;
-                        _controller.matrixController.
-                            StartGettingDigged(currentlyDiggedTile.row, currentlyDiggedTile.column, this);
+                        _tileOwner.StartGettingDigged(currentlyDiggedTile.row,
+                                                  currentlyDiggedTile.column, this);
                         dust.Play();
                     }
 
@@ -42,7 +49,7 @@ namespace Qeqe {
                 }
             } else {
                 if (digged != null) {
-                    _controller.matrixController.StopGettingDigged(digged.row, digged.column, this);
+                    _tileOwner.StopGettingDigged(digged.row, digged.column, this);
                     digged = null;
                 }
             }
@@ -61,8 +68,10 @@ namespace Qeqe {
         public Tile GetDiggedTile () {
             try {
                 if (Verbs.BellowDig) {
+                    _tileOwner = bellowLvlDetector.level;
                     return bellowDigger.GetImpacted().GetComponent<Tile>();
                 } else if (Verbs.FrontalDig) {
+                    _tileOwner = frontalLvlDetector.level;
                     return frontalDigger.GetImpacted().GetComponent<Tile>();
                 }
             } catch (NullReferenceException) {}

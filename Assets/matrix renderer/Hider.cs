@@ -17,13 +17,17 @@ namespace MatrixRenderer {
         }
 
         void OnTriggerExit2D (Collider2D c) {
-            active = false;
-            StartHiding();
+            if (c == null || c.gameObject.CompareTag("level focus detector")) {
+                active = false;
+                StartHiding();
+            }
         }
 
         void OnTriggerEnter2D (Collider2D c) {
-            active = true;
-            StartUnhiding();
+            if (c.gameObject.CompareTag("level focus detector")) {
+                active = true;
+                StartUnhiding();
+            }
         }
 
         public void RefreshSize () {
