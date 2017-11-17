@@ -47,6 +47,7 @@ namespace Matrix {
         }
 
         public void Undig (int i, int j) {
+            _diggingCoroutine.Remove(new Vector2(i, j));
             status.W[i, j] = true;
             status.hp[i, j] = 1;
         }
