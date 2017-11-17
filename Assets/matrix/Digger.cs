@@ -46,6 +46,11 @@ namespace Matrix {
             return false;
         }
 
+        public void Undig (int i, int j) {
+            status.W[i, j] = true;
+            status.hp[i, j] = 1;
+        }
+
         private IEnumerator _GetDigged (int i, int j, Qeqe.Digger digger) {
             float elapsedTime = 0;
 

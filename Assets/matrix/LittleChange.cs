@@ -1,5 +1,6 @@
 using UnityEngine;
 namespace Matrix {
+    [System.Serializable]
     public class LittleChange {
         public enum Type {
             bone,
@@ -11,6 +12,7 @@ namespace Matrix {
         public Qeqe.Status qeqe;
         public Vector2 tile; // logical position
         public Controller owner;
+        // public List<Vector2> eatenBones;
 
         public LittleChange (Type type, GameObject qeqe, Vector2 tile, Controller owner) {
             this.type = type;
@@ -21,7 +23,7 @@ namespace Matrix {
 
         public void Set () {
             this.qeqe.Set();
-            owner.TriggerLittleChange((int)tile.y, (int)tile.x, type);
+            owner.TriggerLittleChange((int)tile.x, (int)tile.y, type);
         }
     }
 }

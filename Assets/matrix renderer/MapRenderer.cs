@@ -73,8 +73,12 @@ namespace MatrixRenderer {
                 tiles[row, col] = null;
             }
 
-            for (int i=-1; i<2; i++) {
-                for (int j=-1; j<2; j++) {
+            MakeCoherent(row, col);
+        }
+
+        public void MakeCoherent (int row, int col) {
+            for (int i=-1; i<2; i++){
+                for (int j=-1; j<2; j++){
                     try {
                         if (_Controller.status.W[row + i, col + j]) {
                             tiles[row + i, col + j].MakeCoherent(GetNTilesMask(row + i, col + j));
@@ -92,7 +96,10 @@ namespace MatrixRenderer {
         }
 
         public void HandleLittleChange (int row, int column, Matrix.Controller matrix, LittleChange.Type change) {
-            Render();
+            if (change == LittleChange.Type.tile) {
+                ConditionallySetTile(row, column);
+                MakeCoherent(row, column);
+            }
         }
 
         public Vector3 LogicalToReal (int row, int column) {

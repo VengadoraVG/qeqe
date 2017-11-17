@@ -65,6 +65,9 @@ namespace Matrix {
                 case LittleChange.Type.bone:
                     GetComponent<Matrix.Powerup>().AddBone(row, col);
                     break;
+                case LittleChange.Type.tile:
+                    GetComponent<Matrix.Digger>().Undig(row, col);
+                    break;
             }
 
             if (OnLittleChange != null) {
