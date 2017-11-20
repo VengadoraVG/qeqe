@@ -7,7 +7,7 @@ namespace Qeqe {
         public Vector3 position;
         public int energy;
         public Vector3 velocity;
-        public GameObject owner;
+        public GameObject owner; // to which qeqe does this state belongs
 
         public Status (GameObject qeqe) {
             position = qeqe.transform.position;

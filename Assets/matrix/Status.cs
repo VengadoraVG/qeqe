@@ -11,8 +11,10 @@ namespace Matrix {
 
         public Status () {}
 
-        public Status (Status father, GameObject qeqe) {
-            Get(father);
+        public Status (Matrix.Controller father, GameObject qeqe) {
+            W = Util.Clone(father.W);
+            hp = Util.Clone(father.hp);
+            B = Util.Clone(father.B);
             this.qeqe = new Qeqe.Status(qeqe);
         }
 
