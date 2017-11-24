@@ -11,7 +11,7 @@ namespace Qeqe {
 
         public Status (GameObject qeqe) {
             position = qeqe.transform.position;
-            energy = qeqe.GetComponent<Controller>().energy;
+            energy = qeqe.GetComponent<Controller>().Energy;
             velocity = qeqe.GetComponent<Movement>().body.velocity;
 
             this.owner = qeqe;
@@ -19,7 +19,7 @@ namespace Qeqe {
 
         public void Set () {
             owner.transform.position = position;
-            owner.GetComponent<Controller>().energy = energy;
+            owner.GetComponent<Controller>().Energy = energy;
             owner.GetComponent<Movement>().body.velocity = velocity;
         }
     }

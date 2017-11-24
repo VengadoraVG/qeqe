@@ -3,7 +3,10 @@ using System.Collections;
 
 namespace Qeqe {
     public class Controller : MonoBehaviour {
-        public int energy;
+        public int Energy {
+            get { return GetComponent<Powerup.Consumer>().energy; }
+            set { GetComponent<Powerup.Consumer>().SetEnergy(value); }
+        }
         public Matrix.Controller matrixController {
             get {
                 return levelDetector.level;

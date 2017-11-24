@@ -6,8 +6,8 @@ using MatrixRenderer;
 namespace Matrix {
     public delegate void TileDigged (int row, int column, Matrix.Controller matrix, Qeqe.Digger digger);
     public delegate void BoneEaten (int row, int column, Matrix.Controller matrix, Consumer consumer);
-    public delegate void LittleChangeDelegate (int row, int column, Matrix.Controller matrix, LittleChange.Type change);
-    
+    public delegate void LittleChangeDelegate (int row, int column, LittleChange.Type change, Qeqe.Status cachedQeqe);
+
     [ExecuteInEditMode]
     public class Controller : MonoBehaviour{
         public TextAsset testLvl;
@@ -19,9 +19,14 @@ namespace Matrix {
         public int Width { get { return status.W.GetLength(0); } }
         public int Height { get { return status.W.GetLength(1); } }
 
+        public int debugWidth;
+        public int debugHeight;
+
         public event TileDigged OnTileDigged;
         public event BoneEaten OnBoneEaten;
         public event LittleChangeDelegate OnLittleChange;
+
+        private Qeqe.Status _tileDiggedCachedQeqe;
 
         void Awake () {
             GameObject.FindWithTag("world controller").
@@ -30,6 +35,7 @@ namespace Matrix {
 
         void Start () {
             status = Parser.Digest(testLvl);
+            status.owner = this;
             _renderer.Initialize(this);
         }
 
@@ -40,16 +46,19 @@ namespace Matrix {
         }
 
         public void TriggerTileDigged (int i, int j, Qeqe.Digger digger) {
-            if (OnTileDigged != null) {
+            if (OnTileDigged != null)
                 OnTileDigged(i, j, this, digger);
-            }
+            if (OnLittleChange != null)
+                OnLittleChange(i, j, LittleChange.Type.tile, _tileDiggedCachedQeqe);
         }
 
         public bool StartGettingDigged (int i, int j, Qeqe.Digger digger) {
+            _tileDiggedCachedQeqe = new Qeqe.Status(digger.gameObject);
             return GetComponent<Matrix.Digger>().StartGettingDigged(i, j, digger);
         }
 
         public bool StopGettingDigged (int i, int j, Qeqe.Digger digger) {
+            _tileDiggedCachedQeqe = null;
             return GetComponent<Matrix.Digger>().StopGettingDigged(i, j, digger);
         }
 
@@ -60,27 +69,16 @@ namespace Matrix {
             }
         }
 
-        public void TriggerLittleChange (int row, int col, LittleChange.Type change) {
-            switch (change) {
-                case LittleChange.Type.bone:
-                    GetComponent<Matrix.Powerup>().AddBone(row, col);
-                    break;
-                case LittleChange.Type.tile:
-                    GetComponent<Matrix.Digger>().Undig(row, col);
-                    break;
-            }
-
-            if (OnLittleChange != null) {
-                OnLittleChange(row, col, this, change);
-            }
-        }
-
         public bool CanDig (Qeqe.Digger digger, Tile tile) {
             Qeqe.Digger tileDigger = GetComponent<Matrix.Digger>().GetDigger(tile.row, tile.column);
 
             if (tileDigger == null || tileDigger == digger)
                 return true;
             return false;
+        }
+
+        public void RequestRenderUpdate () {
+            _renderer.Render();
         }
     }
 }

@@ -3,39 +3,49 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Powerup;
+using Matrix;
+using QeqeInput;
 
-namespace Matrix {
+namespace Qeqe {
     public class Undoer : MonoBehaviour {
-        public List<LittleChange> t;
-        public Stack<LittleChange> history = new Stack<LittleChange>();
-        public World.Controller world;
+        public Stack<Matrix.Status> history =
+            new Stack<Matrix.Status>();
 
-        private GameObject _owner;
+        private Controller _qeqe;
 
         void Start () {
-            world.OnTileDigged += TileChange;
-            _owner = this.gameObject;
+            _qeqe = GetComponent<Controller>();
+            _qeqe.levelDetector.OnLevelSwitch += LevelSwitchHandler;
         }
 
         void Update () {
-            if (QeqeInput.Verbs.Undo) {
-                Undo();
+            if (Verbs.Undo) {
+                history.Peek().Set();
+                if (history.Count > 1) {
+                    history.Pop();
+                }
             }
         }
 
-        public void Undo () {
-            if (history.Count > 0) {
-                history.Pop().Set();
-                t.RemoveAt(t.Count - 1);
+        public void LevelSwitchHandler (Matrix.Controller oldLevel,
+                                        Matrix.Controller newLevel) {
+            if (history.Count == 0)
+                PushState(new Qeqe.Status(_qeqe.gameObject));
+
+            if (oldLevel != null) {
+                oldLevel.OnLittleChange -= HandleLittleChange;
             }
+            newLevel.OnLittleChange += HandleLittleChange;
         }
 
-        public void TileChange (int i, int j, Matrix.Controller matrix, Qeqe.Digger digger) {
-            if (digger.gameObject == _owner) {
-                history.Push(new LittleChange(LittleChange.Type.tile, digger.gameObject,
-                                              new Vector2(i, j), matrix));
-                t.Add(history.Peek());
-            }
+        public void HandleLittleChange (int row, int column, LittleChange.Type change,
+                                        Qeqe.Status qeqe) {
+            PushState(qeqe);
+            history.Peek().UndoChange(row, column, change);
+        }
+
+        public void PushState (Qeqe.Status qeqe) {
+            history.Push(new Matrix.Status(_qeqe.levelDetector.level, qeqe));
         }
     }
 }

@@ -47,7 +47,6 @@ namespace Matrix {
         }
 
         public void Undig (int i, int j) {
-            _diggingCoroutine.Remove(new Vector2(i, j));
             status.W[i, j] = true;
             status.hp[i, j] = 1;
         }
@@ -63,6 +62,7 @@ namespace Matrix {
             status.W[i, j] = false;
             status.hp[i, j] = 0;
             GetComponent<Matrix.Controller>().TriggerTileDigged(i, j, digger);
+            _diggingCoroutine.Remove(new Vector2(i, j));
         }
     }
 }
