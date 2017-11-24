@@ -16,11 +16,8 @@ namespace Matrix {
         public bool update = false;
         public MapRenderer _renderer;
 
-        public int Width { get { return status.W.GetLength(0); } }
-        public int Height { get { return status.W.GetLength(1); } }
-
-        public int debugWidth;
-        public int debugHeight;
+        public int Width { get { return status.W.GetLength(1); } }
+        public int Height { get { return status.W.GetLength(0); } }
 
         public event TileDigged OnTileDigged;
         public event BoneEaten OnBoneEaten;

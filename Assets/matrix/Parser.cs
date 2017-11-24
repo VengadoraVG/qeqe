@@ -28,15 +28,16 @@ namespace Matrix {
         }
 
         public static Status Digest (TextAsset raw) {
-            int width = raw.text.IndexOf('\n') - 1; // new line at end of file
-            int height = raw.text.Length/(width + 1);
+            // FUCKING TEXTASSET!!! replaces \n with two chars >__>
+            string sanitized = GetSanitizedRaw(raw);
+            int width = raw.text.IndexOf('\n') - 1;
+            int height = sanitized.Length/(width);
 
             Status status = new Status();
 
             status.W = new bool[height, width];
             status.hp = new float[height, width];
             status.B = new bool[height, width];
-            string sanitized = GetSanitizedRaw(raw); // FUCKING TEXTASSET!!! replaces \n with two chars >__>
 
             for (int i=0; i<height; i++) {
                 for (int j=0; j<width; j++) {
