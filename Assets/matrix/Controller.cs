@@ -36,14 +36,10 @@ namespace Matrix {
             status = Parser.Digest(testLvl);
             status.owner = this;
             _renderer.Initialize(this);
-
             if (!squared) {
                 Polygoner p = new Polygoner(this);
                 p.FindBorders();
-                Debug.Log("CORNERS----");
-                for (int i=0; i<p.corners.Count; i++) {
-                    Debug.Log(p.corners[i]);
-                }
+                _renderer.GeneratePolygonalHider(p.corners);
             }
         }
 

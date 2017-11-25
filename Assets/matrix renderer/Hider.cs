@@ -30,6 +30,16 @@ namespace MatrixRenderer {
             }
         }
 
+        public void Disable () {
+            curtain.gameObject.SetActive(false);
+            GetComponent<BoxCollider2D>().enabled = false;
+        }
+
+        public void Enable () {
+            curtain.gameObject.SetActive(true);
+            GetComponent<BoxCollider2D>().enabled = true;
+        }
+
         public void RefreshSize () {
             BoxCollider2D collider = GetComponent<BoxCollider2D>();
             Vector2 tileSize = transform.parent.GetComponent<TileController>().size;
