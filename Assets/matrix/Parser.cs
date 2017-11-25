@@ -3,8 +3,8 @@ using System.Collections;
 
 namespace Matrix {
     public class Parser {
-        private static string _mapChar = "x10hbqn";
-        private static string _voidChar = "0bqn";
+        private static string _mapChar = "x10hbqn.";
+        private static string _voidChar = "0bqn.";
 
         public static string GetSanitizedRaw (TextAsset raw) {
             string sanitized = "";
@@ -33,11 +33,7 @@ namespace Matrix {
             int width = raw.text.IndexOf('\n') - 1;
             int height = sanitized.Length/(width);
 
-            Status status = new Status();
-
-            status.W = new bool[height, width];
-            status.hp = new float[height, width];
-            status.B = new bool[height, width];
+            Status status = new Status(height, width);
 
             for (int i=0; i<height; i++) {
                 for (int j=0; j<width; j++) {
@@ -48,6 +44,7 @@ namespace Matrix {
                     status.W[i,j] = !_IsVoid(symbol);
                     status.hp[i,j] = _IsIndestructible(symbol)? (!_IsVoid(symbol)? Mathf.Infinity: 0): 1;
                     status.B[i,j] = _IsBone(symbol);
+                    status.V[i,j] = (symbol == '.');
                 }
             }
 

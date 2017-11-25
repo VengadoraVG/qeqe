@@ -3,7 +3,7 @@ using System.Collections;
 
 [ExecuteInEditMode]
 public class PixelPerfect : MonoBehaviour {
-    public const float FACTOR = 1080 / 17f;
+    public const float FACTOR = 1080 / 14f;
     private Camera _camera;
 
     void Update () {

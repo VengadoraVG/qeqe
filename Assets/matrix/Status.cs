@@ -4,13 +4,19 @@ using System.Collections;
 namespace Matrix {
     [System.Serializable]
     public class Status {
+        public bool[,] V; // true <=> cell is perfect void (for nonsquared matrices)
         public bool[,] W; // true <=> floor
         public float[,] hp; // hp[i,j] says how much hp W[i,j] has (for digging)
         public bool[,] B; // true <=> bone
         public Qeqe.Status qeqe;
         public Matrix.Controller owner;
 
-        public Status () {}
+        public Status (int height, int width) {
+            W = new bool[height, width];
+            hp = new float[height, width];
+            B = new bool[height, width];
+            V = new bool[height, width];
+        }
 
         public Status (Matrix.Controller owner, Qeqe.Status qeqe = null) {
             Get(owner.status);
@@ -29,6 +35,7 @@ namespace Matrix {
 
         public void Get (Status original) {
             owner = original.owner;
+            V = Util.Clone(original.V);
             W = Util.Clone(original.W);
             hp = Util.Clone(original.hp);
             B = Util.Clone(original.B);

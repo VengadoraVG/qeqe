@@ -14,6 +14,8 @@ namespace Matrix {
         [HideInInspector]
         public Status status;
         public bool update = false;
+        public bool squared = true;
+
         public MapRenderer _renderer;
 
         public int Width { get { return status.W.GetLength(1); } }
@@ -34,6 +36,15 @@ namespace Matrix {
             status = Parser.Digest(testLvl);
             status.owner = this;
             _renderer.Initialize(this);
+
+            if (!squared) {
+                Polygoner p = new Polygoner(this);
+                p.FindBorders();
+                Debug.Log("CORNERS----");
+                for (int i=0; i<p.corners.Count; i++) {
+                    Debug.Log(p.corners[i]);
+                }
+            }
         }
 
         void Update () {
