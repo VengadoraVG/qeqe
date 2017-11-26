@@ -14,6 +14,7 @@ namespace Qeqe {
         public ParticleSystem dust;
         public Movement movement;
         public Tile digged;
+        public GameObject crack;
 
         private Qeqe.Controller _controller;
         private Matrix.Controller _tileOwner;
@@ -43,6 +44,9 @@ namespace Qeqe {
                         _tileOwner.StartGettingDigged(currentlyDiggedTile.row,
                                                   currentlyDiggedTile.column, this);
                         dust.Play();
+                        crack.transform.position = currentlyDiggedTile.transform.position;
+                        crack.SetActive(true);
+                        crack.GetComponent<Animator>().SetTrigger("get digged");
                     }
 
                     digged = currentlyDiggedTile;
@@ -60,6 +64,7 @@ namespace Qeqe {
             } else {
                 movement.Unblock();
                 dust.Stop();
+                crack.SetActive(false);
             }
 
             movement.animator.SetBool("IsDigging", isDigging);
