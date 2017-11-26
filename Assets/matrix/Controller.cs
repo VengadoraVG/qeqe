@@ -13,6 +13,8 @@ namespace Matrix {
         public TextAsset testLvl;
         [HideInInspector]
         public Status status;
+        [HideInInspector]
+        public bool dirty = false;
         public bool update = false;
         public bool squared = true;
 
@@ -54,6 +56,7 @@ namespace Matrix {
                 OnTileDigged(i, j, this, digger);
             if (OnLittleChange != null)
                 OnLittleChange(i, j, LittleChange.Type.tile, _tileDiggedCachedQeqe);
+            dirty = true;
         }
 
         public bool StartGettingDigged (int i, int j, Qeqe.Digger digger) {
@@ -67,9 +70,14 @@ namespace Matrix {
         }
 
         public void TriggerBoneEaten (int row, int col, Consumer eater) {
+            dirty = true;
             GetComponent<Matrix.Powerup>().RemoveBone(row, col);
             if (OnBoneEaten != null) {
                 OnBoneEaten(row, col, this, eater);
+            }
+            if (OnLittleChange != null) {
+                OnLittleChange(row, col, LittleChange.Type.bone,
+                               new Qeqe.Status(eater.gameObject));
             }
         }
 

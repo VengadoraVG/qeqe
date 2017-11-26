@@ -15,6 +15,8 @@ namespace Qeqe{
             if (OnLevelSwitch != null) {
                 OnLevelSwitch(oldLevel, level);
             }
+            if (oldLevel != null)
+                oldLevel.dirty = false;
         }
     }
 }

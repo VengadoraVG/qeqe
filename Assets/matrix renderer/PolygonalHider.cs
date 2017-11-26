@@ -10,7 +10,7 @@ namespace MatrixRenderer {
         public Color hidedColor;
         public Color shownColor;
         public float opacityTransitionTime = 1.5f;
-        public bool active;
+        public bool active = false;
 
         private PolygonCollider2D _collider;
         private MeshFilter _meshFilter;
@@ -26,7 +26,7 @@ namespace MatrixRenderer {
             Material mat = new Material(_matRenderer.sharedMaterial);
             _matRenderer.sharedMaterial = mat;
 
-            if (Application.isPlaying)
+            if (Application.isPlaying && !active)
                 OnTriggerExit2D(null);
         }
 

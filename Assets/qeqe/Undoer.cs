@@ -11,6 +11,9 @@ namespace Qeqe {
         public Stack<Matrix.Status> history =
             new Stack<Matrix.Status>();
 
+        public Stack< Stack<Matrix.Status> > trivialChanges =
+            new Stack< Stack<Matrix.Status> >();
+
         private Controller _qeqe;
 
         void Start () {
@@ -20,9 +23,14 @@ namespace Qeqe {
 
         void Update () {
             if (Verbs.Undo) {
+                while(trivialChanges.Peek().Count > 0) {
+                    trivialChanges.Peek().Pop().Set();
+                }
+
                 history.Peek().Set();
                 if (history.Count > 1) {
                     history.Pop();
+                    trivialChanges.Pop();
                 }
             }
         }
@@ -40,12 +48,19 @@ namespace Qeqe {
 
         public void HandleLittleChange (int row, int column, LittleChange.Type change,
                                         Qeqe.Status qeqe) {
-            PushState(qeqe);
-            history.Peek().UndoChange(row, column, change);
+            if (change == LittleChange.Type.tile) {
+                PushState(qeqe);
+                history.Peek().UndoChange(row, column, change);
+            } else if (change == LittleChange.Type.bone) {
+                trivialChanges.Peek().
+                    Push(new Matrix.Status(_qeqe.levelDetector.level, qeqe));
+                trivialChanges.Peek().Peek().UndoChange(row, column, change);
+            }
         }
 
         public void PushState (Qeqe.Status qeqe) {
             history.Push(new Matrix.Status(_qeqe.levelDetector.level, qeqe));
+            trivialChanges.Push(new Stack<Matrix.Status>());
         }
     }
 }

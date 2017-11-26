@@ -46,6 +46,8 @@ namespace Matrix {
             if (change == LittleChange.Type.tile) {
                 W[row, column] = true;
                 hp[row, column] = 1;
+            } else if (change == LittleChange.Type.bone) {
+                B[row, column] = true;
             }
         }
     }
